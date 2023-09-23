@@ -1,0 +1,50 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int      @id @default(autoincrement())
+  email    String   @unique
+  name     String?
+  boards   Board[]
+}
+
+model Board {
+  id      Int      @id @default(autoincrement())
+  title   String
+  owner   User     @relation(fields: [ownerId], references: [id])
+  ownerId Int
+  lists   List[]
+}
+
+model List {
+  id      Int      @id @default(autoincrement())
+  title   String
+  board   Board    @relation(fields: [boardId], references: [id])
+  boardId Int
+  cards   Card[]
+}
+
+model Card {
+  id      Int      @id @default(autoincrement())
+  title   String
+  content String?
+  list    List     @relation(fields: [listId], references: [id])
+  listId  Int
+}
+
+model Task {
+  id        Int      @id @default(autoincrement())
+  title     String
+  completed Boolean @default(false)
+  createdAt DateTime @default(now())
+  
+}
