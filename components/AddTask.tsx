@@ -1,6 +1,11 @@
+import Task from "@/types/Task";
 import { useState } from "react";
 
-const AddTask: React.FC = () => {
+type AddTaskProps = {
+    onTaskAdded: (newTask: Task) => void;
+}
+
+const AddTask: React.FC<AddTaskProps> = (props) => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
 
@@ -15,6 +20,7 @@ const AddTask: React.FC = () => {
         })
             .then((response) => response.json())
             .then((data) => {
+                props.onTaskAdded(data);
                 // Handle the new task data, e.g., update local state or notify the user
                 setTitle(''); // Clear the input fields
                 setDescription('');
